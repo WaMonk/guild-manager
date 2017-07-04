@@ -13,7 +13,7 @@ get '/api/user/info' => sub {
         }
     };
 
-    my $user = resultset('User')->search( { id => 10 } )->first();
+    my $user = resultset('User')->search( { id => 1 } )->first();
 
     if ($user) {
         $out->{db} = {

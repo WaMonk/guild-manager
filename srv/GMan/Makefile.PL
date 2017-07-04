@@ -8,19 +8,26 @@ my $eumm_version = $ExtUtils::MakeMaker::VERSION;
 $eumm_version =~ s/_//;
 
 WriteMakefile(
-    NAME                => 'GMan',
-    AUTHOR              => q{YOUR NAME <youremail@example.com>},
-    VERSION_FROM        => 'lib/GMan.pm',
-    ABSTRACT            => 'YOUR APPLICATION ABSTRACT',
-    ($eumm_version >= 6.3001
-      ? ('LICENSE'=> 'perl')
-      : ()),
-    PL_FILES            => {},
+    NAME         => 'GMan',
+    AUTHOR       => q{YOUR NAME <youremail@example.com>},
+    VERSION_FROM => 'lib/GMan.pm',
+    ABSTRACT     => 'YOUR APPLICATION ABSTRACT',
+    (   $eumm_version >= 6.3001
+        ? ( 'LICENSE' => 'perl' )
+        : ()
+    ),
+    PL_FILES  => {},
     PREREQ_PM => {
-        'Test::More' => 0,
-        'YAML'       => 0,
-        'Dancer2'     => 0.11,
+        'Test::More'                  => 0,
+        'YAML'                        => 0,
+        'Dancer2'                     => 0.11,
+        'Dancer2::Plugin::Database'   => 0,
+        'Dancer2::Plugin::Auth::Tiny' => 0,
+        'Dancer2::Plugin::DBIC'       => 0,
+        'JSON::XS'                    => 0,
+        'Panda::Export'               => 0,
+        'DBD::Pg'                     => 0,
     },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'GMan-*' },
+    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean => { FILES    => 'GMan-*' },
 );

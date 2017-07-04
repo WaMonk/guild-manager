@@ -23,7 +23,7 @@ create table raids (
 
 -- Encounters
 create table encounters (
-    is serial primary key,
+    id serial primary key,
     raid_id int references raids(id),
     name varchar(50),
     description text

@@ -27,3 +27,23 @@ template: "simple"
 #       start_tag: '<%'
 #       end_tag:   '%>'
 
+plugins:
+  DBIC:
+    default: 
+      dsn: "dbi:Pg:db=gman"
+      schema_class: "GMan::Schema"
+      user: db_user1
+      password: 123
+      port: 5432
+      host: localhost
+      options:
+        RaiseError: 1
+        AutoCommit: 1
+    on_connect_do: ["SET NAMES 'utf8'", "SET CHARACTER SET 'utf8'" ]
+    log_queries: 1
+
+session: YAML
+engines:
+  session:
+    YAML:
+      session_dir: /tmp/dancer-sessions

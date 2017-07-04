@@ -14,3 +14,5 @@ sub update {
     my $self = shift;
     return $self->next::method(@_);
 }
+
+1;
