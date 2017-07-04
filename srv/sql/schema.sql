@@ -5,7 +5,8 @@ create table users (
     name varchar(50),
     email varchar(50),
     role varchar(10),
-    points int
+    points int,
+    status varchar(10)
 );
 
 -- Auth:

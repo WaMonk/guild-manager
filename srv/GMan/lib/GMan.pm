@@ -1,7 +1,8 @@
 package GMan;
 use Dancer2;
-use Dancer2::Plugin::DBIC; #qw(schema resultset);
+use Dancer2::Plugin::DBIC;    #qw(schema resultset);
 
+require GMan::Controller::Auth;
 require GMan::Controller::Users;
 
 use Data::Dumper;
@@ -12,21 +13,16 @@ get '/' => sub {
 };
 
 hook before => sub {
-    if ( !session('user') && request->path_info !~ m{^/login} ) {
-        var requested_path => request->path_info;
-        request->path_info('/login');
-    }
 
-    if ( request->path_info =~ m/^\/api\// ) {
+    if ( request->path_info =~ m{/api|auth/}   ) {
         content_type 'application/json';
-
-        my $p = request->parameters;
-        warn Dumper($p); 
-
     }
+
+    if ( !session('user') && request->path_info !~ m{/auth} ) {
+        send_error( "not allowed", 403 );
+    }
+
 };
-
-
 
 get '/login' => sub {
 

@@ -4,7 +4,11 @@
 #    template 'users/index' => { users => \@users };
 #
 
-get '/api/user/info' => sub {
+
+any ['get','post'] => '/api/user/info' => sub {
+
+
+
     my $out = {
         status => 'success',
         data   => {
@@ -14,6 +18,10 @@ get '/api/user/info' => sub {
     };
 
     my $user = resultset('User')->search( { id => 1 } )->first();
+
+    warn "USER INFO: ";
+    warn Dumper(body_parameters);
+    warn Dumper(request->body);
 
     if ($user) {
         $out->{db} = {
@@ -25,4 +33,12 @@ get '/api/user/info' => sub {
     return to_json $out;
 
 };
+
+post '/api/user/auth' => sub {
+
+    my $params = encode_json(request->body);
+    warn Dumper($params);
+
+};
+
 
