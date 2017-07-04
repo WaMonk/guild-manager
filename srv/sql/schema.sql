@@ -21,6 +21,14 @@ create table raids (
     name varchar(50)
 );
 
+-- Encounters
+create table encounters (
+    is serial primary key,
+    raid_id int references raids(id),
+    name varchar(50),
+    description text
+);
+
 -- Points History
 create table points_history (
     user_id int references users(id),
@@ -49,4 +57,12 @@ create table gear (
     gear json
 );
 
-
+-- Gear history
+create table gear_history (
+    id serial primary key,
+    character_id int references characters(id),
+    encounter_id int references encounters(id),
+    history_points_id int references points_history(id),
+    date timestamp,
+    item json
+);
