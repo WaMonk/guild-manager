@@ -27,6 +27,7 @@ WriteMakefile(
         'JSON::XS'                    => 0,
         'Panda::Export'               => 0,
         'DBD::Pg'                     => 0,
+        'Digest::MD5'                 => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES    => 'GMan-*' },

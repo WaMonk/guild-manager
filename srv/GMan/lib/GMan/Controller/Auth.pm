@@ -1,33 +1,83 @@
+use Data::Dumper;
 
 post '/auth/signin' => sub {
-    my $params = encode_json( request->body );
-    warn Dumper($params);
-
+    my $params = decode_json( request->body );
     ## check auth
-    my $user_id = 100;
-    session user => 100;
 
+    my $result = resultset('Auth')->check_auth( $params->{login}, $params->{password}, config->{auth}{salt} );
+    my $out;
+
+    if ($result) {
+        session user => { user_id => $result };
+        $out = { status => 'success' };
+    }
+    else {
+        $out = { status => 'error', message => 'wrong auth data' };
+        response->status(500);
+    }
+
+    return to_json $out;
 };
 
-get '/auth/signin' => sub {
+post '/auth/signup' => sub {
+    my $params = decode_json( request->body );
 
-    #my $params = encode_json(request->body);
-    warn Dumper( request->body );
+    my $out;
+    my $user_params = [qw/login password name email/];
 
-    ## check auth
-    my $user_id = 100;
-    session user => 100;
+    my $data      = {};
+    my $has_error = undef;
 
-    my $out = { status => 'success' };
+    foreach my $param (@$user_params) {
+        unless ( defined $params->{$param} ) {
+            $has_error = "param: '$param' is required";
+            last;
+        }
+        next if $param eq 'login' || $param eq 'password';
+        $data->{$param} = $params->{$param};
+    }
 
+    if ($has_error) {
+        $out = { status => 'error', message => $has_error };
+        response->status(500);
+        return to_json $out;
+    }
+
+    my $has_login = resultset('Auth')->search( { login => $params->{login} } )->first;
+
+    if ($has_login) {
+        $out = { status => 'error', message => 'login already used' };
+        response->status(500);
+        return to_json $out;
+    }
+
+    my $result = resultset('User')->create($data);
+
+    unless ($result) {
+        $out = { status => 'error', message => 'not a created user' };
+        response->status(500);
+        return to_json $out;
+    }
+
+    resultset('Auth')->create_auth( $params->{login}, $params->{password}, config->{auth}{salt}, $result->id );
+    session user => { user_id => $result->id };
+
+    $out = { status => 'success' };
     return to_json $out;
 
 };
 
-post '/auth/signup' => sub {
-    my $params = encode_json( request->body );
-    warn Dumper($params);
+get '/auth/signup_bnet' => sub {
 
-    ## reg user
+    warn Dumper config->{bnet};
+
+    #my $client_id = '';
+};
+
+get '/auth/exit' => sub {
+    app->destroy_session;
+    my $out = { status => 'success' };
+
+    return to_json $out;
 
 };

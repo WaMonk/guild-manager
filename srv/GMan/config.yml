@@ -47,3 +47,5 @@ engines:
   session:
     YAML:
       session_dir: /tmp/dancer-sessions
+auth: 
+ salt: "2cPhvfSage2CcMtzjeJf4NJ9xN2Et7d3FPr"

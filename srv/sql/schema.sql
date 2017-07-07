@@ -12,7 +12,8 @@ create table users (
 -- Auth:
 create table auth (
     user_id int references users(id),
-    pwd varchar(50),
+    login varchar(50),
+    auth_token text,
     UNIQUE(user_id)
 );
 
